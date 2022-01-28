@@ -20,13 +20,30 @@ export function Actions(props) {
     props.onChange(actions);
   };
 
+  const handleRemove = (index) => {
+    const actions = [...props.actions];
+    actions.splice(index, 1);
+
+    props.onChange(actions);
+  };
+
   return (
     <div className="section-container">
       <span className="section-name">Actions</span>
       <ul>
         {props.actions &&
           props.actions.map((action, i) => (
-            <li key={i}>{<Action id={i} key={"action-" + i} action={action} onChange={handleChangeAction} />}</li>
+            <li key={i}>
+              {
+                <Action
+                  key={"action-" + i}
+                  id={i}
+                  action={action}
+                  onChange={handleChangeAction}
+                  onRemove={handleRemove}
+                />
+              }
+            </li>
           ))}
         <li>
           <div className="control">

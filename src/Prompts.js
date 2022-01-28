@@ -27,6 +27,17 @@ export function Prompts(props) {
     props.onChange(prompts);
   };
 
+  const handleRemove = (parentIndex, index) => {
+    debugger;
+    const prompts = [
+      ...props.prompts,
+    ];
+
+    prompts[parentIndex].prompt.splice(index, 1);
+
+    props.onChange(prompts);
+  }
+
   return (
     <div className="section-container">
       <span className="section-name">Prompts</span>
@@ -34,7 +45,16 @@ export function Prompts(props) {
         {props.prompts &&
           props.prompts.map((prompts, i) =>
             prompts.prompt.map((prompt, j) => (
-              <li key={`${i}-${j}`}>{<Prompt parentId={i} id={j} key={`${i}-${j}`} prompt={prompt} onChange={handleChangePrompt} />}</li>
+              <li key={`${i}-${j}`}>{
+                <Prompt 
+                  key={`${i}-${j}`} 
+                  parentId={i} 
+                  id={j}
+                  prompt={prompt} 
+                  onChange={handleChangePrompt}
+                  onRemove={handleRemove}
+                />}
+              </li>
             ))
           )}
 

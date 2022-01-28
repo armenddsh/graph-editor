@@ -23,7 +23,7 @@ export function Action(props) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      <i className="fas fa-times-circle remove-action-icon"></i>
+      <i className="fas fa-times-circle remove-action-icon" onClick={() => props.onRemove(props.id)}></i>
       <i className="far fa-circle circle-icon"></i>
     </div>
   );
