@@ -1,41 +1,72 @@
 import React, { useEffect } from "react";
 
 export function withDragging(Component) {
-  return function WithDraggingComponent({...props}) {
-
+  return function WithDraggingComponent({ ...props }) {
     const ref = React.useRef();
+    const isDragging = React.useRef(false);
+    const offset = React.useRef({ x: 0, y: 0 });
+
     const [data, setData] = React.useState(props.data);
-    const [isDragging, setIsDragging] = React.useState(false);
-    const [offset, setOffset] = React.useState({ x: 0, y: 0 });
     const objectMovedAllowed = React.useMemo(() => ["span", "div"]);
-    
+
     const handlePointerUp = (event) => {
-      setIsDragging(false);
+      isDragging.current = false;
     };
 
     useEffect(() => {
-        props.onChange(data);
+      document.addEventListener("pointerdown", handlePointerDown);
+      document.addEventListener("pointermove", handlePointerMove);
+      document.addEventListener("pointerup", handlePointerUp);
+
+      () => {
+        document.removeEventListener("pointerdown");
+        document.removeEventListener("pointermove");
+        document.removeEventListener("pointerup");
+      };
+    }, []);
+
+    useEffect(() => {
+      props.onChange(data);
     }, [data]);
-    
+
     const handlePointerDown = (event) => {
-      const tagName = event.target.tagName.toLowerCase();
-      if (objectMovedAllowed.includes(tagName)) {
-        let hsRect = null;
-        if (navigator.userAgent.indexOf("Firefox") > 0) {
-          hsRect = ref.current.getBBox();
-        } else {
-          hsRect = ref.current.getBoundingClientRect();
+      let isAtom = false;
+
+      let target = event.target;
+      while (!isAtom) {
+
+        const className = target.className;
+        if (className === "draggable-atom") {
+          const tagName = event.target.tagName.toLowerCase();
+          if (objectMovedAllowed.includes(tagName)) {
+            let hsRect = null;
+            if (navigator.userAgent.indexOf("Firefox") > 0) {
+              hsRect = ref.current.getBBox();
+            } else {
+              hsRect = ref.current.getBoundingClientRect();
+            }
+            offset.current = {
+              x: event.clientX - hsRect.x,
+              y: event.clientY - hsRect.y,
+            };
+            isDragging.current = true;
+
+            break;
+          }
         }
-        setIsDragging(true);
-        setOffset({ x: event.clientX - hsRect.x, y: event.clientY - hsRect.y });
+        if (target.parentNode) {
+          target = target.parentNode;
+        } else {
+          break;
+        }
       }
     };
 
     const handlePointerMove = (event) => {
-      if (isDragging) {
+      if (isDragging.current) {
         const dataCopy = JSON.parse(JSON.stringify(data));
-        dataCopy.position.x = event.clientX - offset.x;
-        dataCopy.position.y = event.clientY - offset.y;
+        dataCopy.position.x = event.clientX - offset.current.x;
+        dataCopy.position.y = event.clientY - offset.current.y;
 
         setData(dataCopy);
       }
@@ -44,13 +75,10 @@ export function withDragging(Component) {
     return (
       <div
         ref={ref}
-        onPointerUp={handlePointerUp}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
         className="draggable-atom"
         style={{
           top: data.position.y,
-          left: data.position.x
+          left: data.position.x,
         }}
       >
         <Component {...data} />

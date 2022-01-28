@@ -2,6 +2,7 @@ import React from "react";
 import { Action } from "./Action";
 
 export function Actions(props) {
+
   const addNewAction = () => {
     const actions = [...props.actions];
 
@@ -13,9 +14,10 @@ export function Actions(props) {
     props.onChange(actions);
   };
 
-  const handleChangeAction = (index, action) => {
+  const handleChangeAction = (index, text) => {
     const actions = [...props.actions];
-    actions[index] = action;
+    const currentAction = actions[index];
+    currentAction.condition.eval = text;
 
     props.onChange(actions);
   };

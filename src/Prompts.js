@@ -23,7 +23,7 @@ export function Prompts(props) {
     const prompts = [
       ...props.prompts,
     ];
-    prompts[parentIndex][index] = prompt;
+    prompts[parentIndex].prompt[index] = prompt;
 
     props.onChange(prompts);
   };

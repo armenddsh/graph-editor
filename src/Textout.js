@@ -4,19 +4,25 @@ import { Prompts } from "./Prompts";
 
 export function Textout(props) {
   const [state, setState] = React.useState(props);
-  
-  const handlePromptsChange = React.useCallback((prompts) => {
-    const newObj = Object.assign({}, state, {
-        config: Object.assign({}, state.config, { prompts })
-    });
-    setState(newObj);
-  }, [state]);
 
-  const handleActionsChange = React.useCallback((action) => {
+  const handlePromptsChange = React.useCallback(
+    (prompts) => {
+      const newObj = Object.assign({}, state, {
+        config: Object.assign({}, state.config, { prompts }),
+      });
+      setState(newObj);
+    },
+    [state]
+  );
+
+  const handleActionsChange = React.useCallback(
+    (action) => {
       const newObj = Object.assign({}, state, { action });
       setState(newObj);
-    }, [state]);
-  
+    },
+    [state]
+  );
+
   return (
     <div className="atom" data-situation="texout" data-id={props.id}>
       <i className="far fa-circle atom-input"></i>
@@ -26,17 +32,16 @@ export function Textout(props) {
           <span>{state.id}</span>
         </div>
 
-        {<Prompts
-          prompts={state.config.prompts}
-          onChange={handlePromptsChange}
-        />}
+        {
+          <Prompts
+            prompts={state.config.prompts}
+            onChange={handlePromptsChange}
+          />
+        }
 
         <div className="divider"></div>
 
-        {<Actions
-          actions={state.action}
-          onChange={handleActionsChange}
-        />}
+        {<Actions actions={state.action} onChange={handleActionsChange} />}
       </div>
     </div>
   );

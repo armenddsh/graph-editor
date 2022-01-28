@@ -23,7 +23,7 @@ export const SituationWithDraggingComponent = withDragging(Situation);
 export const ExitWithDraggingComponent = withDragging(Exit);
 
 export default function App() {
-  const [data, _] = React.useState({
+  const [data, setData] = React.useState({
     name: "test_0001",
     description: "Test 0001. Play Prompt",
     start: "start",
@@ -69,35 +69,6 @@ export default function App() {
         },
         id: "start"
       },
-      greeting: {
-        config: {
-          prompts: [
-            {
-              prompt: [
-                {
-                  text: "Hallo"
-                }
-              ]
-            }
-          ]
-        },
-        action: [],
-        id: "greeting",
-        situation: "@textout",
-        description: "",
-        position: {
-          x: 420,
-          y: 100,
-          active: false,
-          offset: {
-            x: 104,
-            y: 27
-          },
-          width: "100%",
-          height: "100%",
-          moving: false
-        }
-      }
     }
   });
 
@@ -113,7 +84,12 @@ export default function App() {
       */
 
   const handleChange = (data) => {
-    console.log(data);
+    setData(oldData => {
+      return {
+        ...oldData,
+        [data.id]: data
+      }
+    });    
   };
 
   const renderSituation = (situation) => {
