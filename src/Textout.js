@@ -5,6 +5,8 @@ import { Prompts } from "./Prompts";
 export function Textout(props) {
   return (
     <div className="atom" data-situation="texout" data-id={props.data.id}>
+      <div className="atom-input"></div>
+
       <div className="container">
         <div className="atom__name">
           <span>{props.data.id}</span>

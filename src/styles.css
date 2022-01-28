@@ -1,3 +1,11 @@
+:root {
+  --border-color: #cacaca;
+  --background-color: #ffffff;
+  --background-box-title: #f7f7f7;
+  --primary-color: #4ea9ff;
+  --box-font-color: #555;
+}
+
 *,
 *::before,
 *::after {
@@ -11,13 +19,12 @@ main {
 }
 
 .container {
-  background-color: #cccccc;
-  color: #7a7a7a;
+  color: var(--box-font-color);
   width: 310px;
   border-radius: 5px;
   padding: 5px;
   cursor: move;
-  resize: horizontal;
+  resize: none;
   overflow: auto;
 }
 
@@ -48,6 +55,7 @@ ul li {
   display: flex;
   justify-content: center;
   padding: 3px 0;
+  background: var(--border-color);
 }
 
 .atom__name > span {
@@ -138,12 +146,35 @@ ul li {
   width: 100vw;
   height: 100vh;
   position: relative;
+  background-size: 25px 25px;
+  background-image: linear-gradient(to right, #f1f1f1 1px, transparent 1px), linear-gradient(to bottom, #f1f1f1 1px, transparent 1px);
 }
 
 .atom {
+  background-color: var(--border-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 15px 2px var(--border-color);
+  border-radius: 5px;
 }
 
 .draggable-atom {
   display: inline-block;
   position: absolute;
+}
+
+.atom-input {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 50%;
+  left: -10px;
+  background: #FFF;
+  color: #000;
+  border: 1px solid #777;
+}
+
+.atom-input:hover {
+  background-color: var(--box-font-color);
 }

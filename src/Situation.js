@@ -6,6 +6,7 @@ export function Situation(props) {
   return (
     <div className="atom" data-situation="situation" data-id={props.data.id}>
       <div className="container">
+        <div className="atom-input"></div>
         <div className="atom__name">
           <span>{props.data.id}</span>
         </div>
