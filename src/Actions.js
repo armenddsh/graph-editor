@@ -36,7 +36,6 @@ export function Actions(props) {
             <li key={i}>
               {
                 <Action
-                  key={"action-" + i}
                   id={i}
                   action={action}
                   onChange={handleChangeAction}

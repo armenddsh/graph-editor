@@ -47,7 +47,6 @@ export function Prompts(props) {
             prompts.prompt.map((prompt, j) => (
               <li key={`${i}-${j}`}>{
                 <Prompt 
-                  key={`${i}-${j}`} 
                   parentId={i} 
                   id={j}
                   prompt={prompt} 
