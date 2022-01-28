@@ -44,7 +44,7 @@ export function Actions(props) {
               }
             </li>
           ))}
-        <li>
+        <li key="add-new-action">
           <div className="control">
             <input type="button" className="btn add-more" value="New Action" onClick={addNewAction} />
           </div>

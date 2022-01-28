@@ -3,8 +3,8 @@ import { Actions } from "./Actions";
 import { Prompts } from "./Prompts";
 
 export function Textout(props) {
-  const [state, setState] = React.useState(props.data);
-  console.log(state);
+  const [state, setState] = React.useState(props);
+  
   const handlePromptsChange = React.useCallback((prompts) => {
     const newObj = Object.assign({}, state, {
         config: Object.assign({}, state.config, { prompts })
@@ -18,7 +18,7 @@ export function Textout(props) {
     }, [state]);
   
   return (
-    <div className="atom" data-situation="texout" data-id={props.data.id}>
+    <div className="atom" data-situation="texout" data-id={props.id}>
       <i className="far fa-circle atom-input"></i>
 
       <div className="container">

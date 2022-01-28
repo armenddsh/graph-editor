@@ -5,7 +5,6 @@ import { withDragging } from "./hoc/withDragging";
 import { Hotword } from "./Hotword";
 import { SimpleInput } from "./SimpleInput";
 import { Situation } from "./Situation";
-import { Situations } from "./Situations";
 import { Switch } from "./Switch";
 import { Textout } from "./Textout";
 
@@ -113,13 +112,39 @@ export default function App() {
 
       */
 
+  const handleChange = (data) => {
+    console.log(data);
+  };
+
+  const renderSituation = (situation) => {
+    const situationName = situation.situation;
+    if (situationName === "@textout") {
+      return <TextOutWithDraggingComponent data={situation} onChange={handleChange} /> 
+    }
+    if (situationName === "@callback") {
+      return <CallbackWithDraggingComponent data={situation} onChange={handleChange} />
+    }
+    if (situationName === "@switch") {
+      return <SwitchWithDraggingComponent data={situation} onChange={handleChange} />
+    }
+    if (situationName === "@exit") {
+      return <ExitWithDraggingComponent data={situation} onChange={handleChange} />
+    }
+    if (situationName === "@situation") {
+      return <SituationWithDraggingComponent data={situation} onChange={handleChange} />
+    }
+    if (situationName === "@simpleinput") {
+      return <SimpleInputWithDraggingComponent data={situation} onChange={handleChange} />
+    }
+  }
+
   const situationsArray = Object.keys(data.situations);
   return (
     <div className="draw-container">
       {situationsArray.map((situationName) =>
         <React.Fragment key={situationName}>
           {
-            Situations(data.situations[situationName])
+            renderSituation(data.situations[situationName])
           }
         </React.Fragment>
       )}

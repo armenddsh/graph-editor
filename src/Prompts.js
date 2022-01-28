@@ -2,6 +2,7 @@ import React from "react";
 import { Prompt } from "./Prompt";
 
 export function Prompts(props) {
+
   const addNewPrompt = () => {
     const prompts = [
       ...props.prompts,
@@ -28,7 +29,6 @@ export function Prompts(props) {
   };
 
   const handleRemove = (parentIndex, index) => {
-    debugger;
     const prompts = [
       ...props.prompts,
     ];
@@ -57,7 +57,7 @@ export function Prompts(props) {
             ))
           )}
 
-        <li>
+        <li key="add-new-prompt">
           <div className="control">
             <input type="button" className="btn add-more" value="New Prompt" onClick={addNewPrompt} />
           </div>
