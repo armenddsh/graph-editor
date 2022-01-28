@@ -116,7 +116,7 @@ ul li {
 }
 
 .circle-icon:hover {
-  background-color: #111;
+  background-color: darkgray;
   border-radius: 50%;
 }
 
@@ -133,7 +133,8 @@ ul li {
 }
 
 .section-container {
-  border: 1px solid #eee;
+  border: 1px solid #aaa;
+  margin-top: 5px;
 }
 
 .section-name {
@@ -165,16 +166,12 @@ ul li {
 .atom-input {
   content: "";
   position: absolute;
-  width: 20px;
-  height: 20px;
   border-radius: 50%;
   top: 50%;
-  left: -10px;
-  background: #FFF;
-  color: #000;
-  border: 1px solid #777;
+  left: -8px;
+  background-color: #FFF;
 }
 
 .atom-input:hover {
-  background-color: var(--box-font-color);
+  background-color: darkgray;
 }

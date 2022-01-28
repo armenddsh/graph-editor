@@ -48,6 +48,14 @@ export default function App() {
             }
           ]
         },
+        action: [
+         {
+           condition: {
+             eval: "x == 1"
+           },
+           next: "greeting"
+         }
+        ],
         position: {
           x: 100,
           y: 100,
@@ -109,7 +117,11 @@ export default function App() {
   return (
     <div className="draw-container">
       {situationsArray.map((situationName) =>
-        Situations(data.situations[situationName])
+        <React.Fragment key={situationName}>
+          {
+            Situations(data.situations[situationName])
+          }
+        </React.Fragment>
       )}
     </div>
   );

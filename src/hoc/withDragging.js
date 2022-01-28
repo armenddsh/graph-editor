@@ -6,20 +6,23 @@ export function withDragging(Component) {
     const [data, setData] = React.useState(props);
     const [isDragging, setIsDragging] = React.useState(false);
     const [offset, setOffset] = React.useState({ x: 0, y: 0 });
-
+    const objectMovedAllowed = React.useMemo(() => ["span", "div"]);
     const handlePointerUp = (event) => {
       setIsDragging(false);
     };
 
     const handlePointerDown = (event) => {
-      let hsRect = null;
-      if (navigator.userAgent.indexOf("Firefox") > 0) {
-        hsRect = ref.current.getBBox();
-      } else {
-        hsRect = ref.current.getBoundingClientRect();
+      const tagName = event.target.tagName.toLowerCase();
+      if (objectMovedAllowed.includes(tagName)) {
+        let hsRect = null;
+        if (navigator.userAgent.indexOf("Firefox") > 0) {
+          hsRect = ref.current.getBBox();
+        } else {
+          hsRect = ref.current.getBoundingClientRect();
+        }
+        setIsDragging(true);
+        setOffset({ x: event.clientX - hsRect.x, y: event.clientY - hsRect.y });
       }
-      setIsDragging(true);
-      setOffset({ x: event.clientX - hsRect.x, y: event.clientY - hsRect.y });
     };
 
     const handlePointerMove = (event) => {
