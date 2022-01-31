@@ -5,6 +5,7 @@ export function withDragging(Component) {
     const ref = React.useRef();
     const isDragging = React.useRef(false);
     const offset = React.useRef({ x: 0, y: 0 });
+    const situation = React.useRef();
 
     const [data, setData] = React.useState(props.data);
     const objectMovedAllowed = React.useMemo(() => ["span", "div"]);
@@ -49,6 +50,7 @@ export function withDragging(Component) {
               x: event.clientX - hsRect.x,
               y: event.clientY - hsRect.y,
             };
+            situation.current = target.getAttribute("data-id");
             isDragging.current = true;
 
             break;
@@ -63,7 +65,7 @@ export function withDragging(Component) {
     };
 
     const handlePointerMove = (event) => {
-      if (isDragging.current) {
+      if (isDragging.current && situation.current === data.id) {
         const dataCopy = JSON.parse(JSON.stringify(data));
         dataCopy.position.x = event.clientX - offset.current.x;
         dataCopy.position.y = event.clientY - offset.current.y;
@@ -75,6 +77,7 @@ export function withDragging(Component) {
     return (
       <div
         ref={ref}
+        data-id={data.id}
         className="draggable-atom"
         style={{
           top: data.position.y,
