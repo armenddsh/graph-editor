@@ -40,6 +40,7 @@ export function Actions(props) {
                 <Action
                   id={i}
                   action={action}
+                  situationName={props.situationName}
                   onChange={handleChangeAction}
                   onRemove={handleRemove}
                 />

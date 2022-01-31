@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Callback } from "./Callback";
 import { Exit } from "./Exit";
 import { withDragging } from "./hoc/withDragging";
@@ -111,7 +112,6 @@ export default function App() {
         id: "demo"
       },
     },
-    
   });
 
   /*
@@ -133,6 +133,11 @@ export default function App() {
       }
     });    
   };
+
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
+
+  console.log("state", state);
 
   const renderSituation = (situation) => {
     const situationName = situation.situation;
@@ -156,9 +161,25 @@ export default function App() {
     }
   }
 
+  const handlePointerMove = (event) => {
+    if (state.app.startDragging.positions.startX && state.app.startDragging.positions.startY) {
+      dispatch({
+        type: "MOUSE_DRAGGING",
+        payload: {
+          positions: {
+            x: event.clientX,
+            y: event.clientY
+          } 
+        }
+      });
+    }
+  };
+
   const situationsArray = Object.keys(data.situations);
+
+  console.log(state.app.startDragging);
   return (
-    <div className="draw-container">
+    <div className="draw-container" onPointerMove={handlePointerMove}>
       {situationsArray.map((situationName) =>
         <React.Fragment key={situationName}>
           {
@@ -166,6 +187,21 @@ export default function App() {
           }
         </React.Fragment>
       )}
+      {
+        state.app.startDragging.startSituation &&
+        state.app.startDragging.positions.x > 0 &&
+        state.app.startDragging.positions.y > 0 && (
+          <svg height="100%" width="100%">
+            <line
+              className="draggable__line"
+              x1={state.app.startDragging.positions.startX | 0}
+              y1={state.app.startDragging.positions.startY | 0}
+              x2={state.app.startDragging.positions.x | 0}
+              y2={state.app.startDragging.positions.y | 0}
+            />
+          </svg>
+        )
+      }
     </div>
   );
 }

@@ -14,7 +14,7 @@ export function Callback(props) {
 
         <div className="divider"></div>
 
-        {<Actions actions={props.data.action} />}
+        {<Actions actions={props.data.action} situationName={props.data.id} />}
       </div>
     </div>
   );

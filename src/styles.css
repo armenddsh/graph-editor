@@ -109,8 +109,6 @@ ul li {
 
 .circle-icon {
   position: absolute;
-  right: 10px;
-  top: 13px;
   color: #333;
   cursor: pointer;
 }
@@ -174,4 +172,16 @@ ul li {
 
 .atom-input:hover {
   background-color: darkgray;
+}
+
+.action-next,
+.atom-input {
+  user-select: none;
+  background: #FFF;
+  border-radius: 50%;
+}
+
+.draggable__line {
+  stroke: #4ea9ff;
+  stroke-width: 4px;
 }
