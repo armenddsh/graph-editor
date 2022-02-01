@@ -43,6 +43,8 @@ export function Actions(props) {
                   situationName={props.situationName}
                   onChange={handleChangeAction}
                   onRemove={handleRemove}
+                  startDragging={props.startDragging}
+                  endDragging={props.endDragging}
                 />
               }
             </li>

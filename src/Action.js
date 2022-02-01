@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
 
 export function Action(props) {
-  const dispatch = useDispatch();
   const ref = useRef();
 
   let top = 0;
@@ -11,6 +9,20 @@ export function Action(props) {
     top = ref.current.parentNode.offsetTop + 15;
     left = ref.current.parentNode.offsetLeft + ref.current.clientWidth + 10;
   }
+
+  const handleStartDragging = (event) => {
+    const situationName = props.situationName;
+    const actionId = props.id;
+    const clientX = event.clientX;
+    const clientY = event.clientY;
+
+    props.startDragging({
+      situationName,
+      actionId,
+      clientX,
+      clientY
+    });
+  };
 
   return (
     <div className="action">
@@ -30,16 +42,9 @@ export function Action(props) {
     </div>
     <i
       style={{top: top, left: left}}
-      className="far fa-circle circle-icon action-next" onPointerDown={(event) => dispatch({type: "START_DRAGGING", payload: {
-      startSituation: props.situationName,
-      actionId: props.id,
-      positions: {
-        startX: event.clientX,
-        startY: event.clientY,
-        endX: 0,
-        endY: 0
-      }
-    }})}></i>
+      className="far fa-circle circle-icon action-next"
+      onPointerDown={handleStartDragging}
+    ></i>
     </div>
   );
 }

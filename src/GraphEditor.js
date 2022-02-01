@@ -1,4 +1,4 @@
-import React, { createRef } from "react";
+import React, { createRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Callback } from "./Callback";
 import { Exit } from "./Exit";
@@ -20,6 +20,23 @@ export const ExitWithDraggingComponent = withDragging(Exit);
 export default function GraphEditor(props) {
   const refs = React.useRef(Object.keys(props.data.situations).map(() => createRef()));
 
+  const [isDragging, setDragging] = useState({
+    isDragging: false,
+    from: {
+      situation: "",
+      actionId: 0,
+      x: 0,
+      y: 0
+    },
+    to: {
+      situation: "",
+      x: 0,
+      y: 0
+    },
+    x: 0,
+    y: 0
+  });
+
   const handleChange = (data) => {
     props.onChange((oldData) => {
       return {
@@ -28,10 +45,46 @@ export default function GraphEditor(props) {
       };
     });
   };
-
-  const state = useSelector((state) => state);
-  const dispatch = useDispatch();
   
+  const handleStartDragging = ( data ) => {
+    setDragging(dragging => {
+      return {
+        ...dragging,
+        from: {
+          ...dragging.from,
+          situation: data.situationName,
+          actionId: data.actionId,
+          x: data.clientX,
+          y: data.clientY
+        },
+        isDragging: true
+      }
+    });
+  };
+
+  const handleEndDragging = ( data ) => {
+    setDragging(dragging => {
+      return {
+        ...dragging,
+        to: {
+          ...dragging.from,
+          situation: data.situationName,
+        },
+        isDragging: false
+      }
+    });
+  };
+
+  const handleDragging = ( data ) => {
+    setDragging(dragging => {
+      return {
+        ...dragging,
+        x: data.clientX,
+        y: data.clientY
+      }
+    });
+  };
+
   const renderSituation = (situation, index) => {
     const situationName = situation.situation;
     if (situationName === "@textout") {
@@ -39,8 +92,9 @@ export default function GraphEditor(props) {
         <TextOutWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
@@ -49,8 +103,9 @@ export default function GraphEditor(props) {
         <CallbackWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
@@ -59,8 +114,9 @@ export default function GraphEditor(props) {
         <SwitchWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
@@ -69,8 +125,9 @@ export default function GraphEditor(props) {
         <ExitWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
@@ -79,8 +136,9 @@ export default function GraphEditor(props) {
         <SituationWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
@@ -89,8 +147,9 @@ export default function GraphEditor(props) {
         <SimpleInputWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
@@ -99,48 +158,30 @@ export default function GraphEditor(props) {
         <HotwordWithDraggingComponent
           ref={refs.current[index]}
           situation={situation}
-          situations={props.data.situations}
           change={handleChange}
+          startDragging={handleStartDragging}
+          endDragging={handleEndDragging}
         />
       );
     }
   };
 
-  const handlePointerMove = (event) => {
-    if (
-      state.app.startDragging.positions.startX &&
-      state.app.startDragging.positions.startY
-    ) {
-      dispatch({
-        type: "MOUSE_DRAGGING",
-        payload: {
-          positions: {
-            x: event.clientX,
-            y: event.clientY,
-          },
-        },
-      });
-    }
-  };
-
   const situationsArray = Object.keys(props.data.situations);
   return (
-    <div className="draw-container" onPointerMove={handlePointerMove}>
+    <div className="draw-container" onPointerMove={handleDragging}>
       {situationsArray.map((situationName, index) => (
         <React.Fragment key={situationName}>
           {renderSituation(props.data.situations[situationName], index)}
         </React.Fragment>
       ))}
-      {state.app.startDragging.startSituation &&
-        state.app.startDragging.positions.x > 0 &&
-        state.app.startDragging.positions.y > 0 && (
+      { isDragging.isDragging && (
           <svg height="100%" width="100%">
             <line
               className="draggable__line"
-              x1={state.app.startDragging.positions.startX | 0}
-              y1={state.app.startDragging.positions.startY | 0}
-              x2={state.app.startDragging.positions.x | 0}
-              y2={state.app.startDragging.positions.y | 0}
+              x1={isDragging.from.x | 0}
+              y1={isDragging.from.y | 0}
+              x2={isDragging.x | 0}
+              y2={isDragging.y | 0}
             />
           </svg>
         )}
