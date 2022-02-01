@@ -5,9 +5,9 @@ import { NoInputs } from "./NoInputs";
 import { NoMatchs } from "./NoMatchs";
 import { Prompts } from "./Prompts";
 
-export function SimpleInput(props) {
+export const SimpleInput = React.forwardRef((props, ref) => {
   return (
-    <div className="atom" data-situation="simpleinput" data-id={props.data.id}>
+    <div ref={ref} className="atom" data-situation="simpleinput" data-id={props.data.id}>
       <div className="container">
         <div className="atom__name">
           <span>{props.data.id}</span>
@@ -33,4 +33,4 @@ export function SimpleInput(props) {
       </div>
     </div>
   );
-}
+})

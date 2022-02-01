@@ -19,12 +19,6 @@ export const ExitWithDraggingComponent = withDragging(Exit);
 
 export default function GraphEditor(props) {
   const refs = React.useRef(Object.keys(props.data.situations).map(() => createRef()));
-  
-  const addRefs = (ref) => {
-    if (ref && !refs.current.includes(ref)) {
-      refs.current.push(ref);
-    }
-  };
 
   const handleChange = (data) => {
     props.onChange((oldData) => {

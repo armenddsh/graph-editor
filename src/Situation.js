@@ -2,9 +2,9 @@ import React from "react";
 import { Actions } from "./Actions";
 import { Mappings } from "./Mappings";
 
-export function Situation(props) {
+export const Situation = React.forwardRef((props, ref) => {
   return (
-    <div className="atom" data-situation="situation" data-id={props.data.id}>
+    <div ref={ref} className="atom" data-situation="situation" data-id={props.data.id}>
       <div className="container">
         <div className="atom-input"></div>
         <div className="atom__name">
@@ -36,4 +36,4 @@ export function Situation(props) {
       </div>
     </div>
   );
-}
+});

@@ -4,9 +4,9 @@ import { Grammars } from "./Grammars";
 import { NoInputs } from "./NoInputs";
 import { Prompts } from "./Prompts";
 
-export function Hotword(props) {
+export const Hotword = React.forwardRef((props, ref) => {
   return (
-    <div className="atom" data-situation="hotword" data-id={props.data.id}>
+    <div ref={ref} className="atom" data-situation="hotword" data-id={props.data.id}>
       <div className="container">
         <div className="atom__name">
           <span>{props.data.id}</span>
@@ -28,4 +28,4 @@ export function Hotword(props) {
       </div>
     </div>
   );
-}
+});

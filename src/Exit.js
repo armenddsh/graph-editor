@@ -1,9 +1,9 @@
 import React from "react";
 import { Prompts } from "./Prompts";
 
-export function Exit(props) {
+export const Exit = React.forwardRef((props, ref) => {
   return (
-    <div className="atom" data-situation="exit" data-id={props.data.id}>
+    <div ref={ref} className="atom" data-situation="exit" data-id={props.data.id}>
       <div className="container">
         <div className="atom__name">
           <span>{props.data.id}</span>
@@ -13,4 +13,4 @@ export function Exit(props) {
       </div>
     </div>
   );
-}
+});

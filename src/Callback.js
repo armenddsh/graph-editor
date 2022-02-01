@@ -2,9 +2,9 @@ import React from "react";
 import { Actions } from "./Actions";
 import { Prompts } from "./Prompts";
 
-export function Callback(props) {
+export const Callback = React.forwardRef((props, ref) => {
   return (
-    <div className="atom" data-situation="callback" data-id={props.data.id}>
+    <div ref={ref} className="atom" data-situation="callback" data-id={props.data.id}>
       <div className="container">
         <div className="atom__name">
           <span>{props.data.id}</span>
@@ -18,4 +18,4 @@ export function Callback(props) {
       </div>
     </div>
   );
-}
+});
