@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 
 export function withDragging(Component) {
   return React.forwardRef((props, forwardRef) => {
+    
     const ref = React.useRef();
     const isDragging = React.useRef(false);
     const offset = React.useRef({ x: 0, y: 0 });

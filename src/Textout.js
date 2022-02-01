@@ -4,9 +4,10 @@ import { Actions } from "./Actions";
 import { Prompts } from "./Prompts";
 
 export const Textout = React.forwardRef((props, ref) => {
-  console.log(ref);
+
   const [state, setState] = React.useState(props);
   const dispatch = useDispatch();
+  
   const handlePromptsChange = React.useCallback(
     (prompts) => {
       const newObj = Object.assign({}, state, {
