@@ -25,7 +25,7 @@ export function Action(props) {
   };
 
   return (
-    <div className="action">
+    <div data-id="action" className="action">
       <div className="control">
       <i className="fab fa-yandex-international action-icon"></i>
       <input

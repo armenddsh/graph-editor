@@ -16,8 +16,16 @@ export const SwitchWithDraggingComponent = withDragging(Switch);
 export const SituationWithDraggingComponent = withDragging(Situation);
 export const ExitWithDraggingComponent = withDragging(Exit);
 
+function createRefs(situations) {
+  const newObj = {};
+  for (const situationName of Object.keys(situations)) {
+    newObj[situationName] = createRef();
+  }
+  return newObj;
+}
+
 export default function GraphEditor(props) {
-  const refs = React.useRef(Object.keys(props.data.situations).map(() => createRef()));
+  const refs = React.useRef(createRefs(props.data.situations));
 
   const [isDragging, setDragging] = useState({
     isDragging: false,
@@ -95,7 +103,7 @@ export default function GraphEditor(props) {
     if (situationName === "@textout") {
       return (
         <TextOutWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -106,7 +114,7 @@ export default function GraphEditor(props) {
     if (situationName === "@callback") {
       return (
         <CallbackWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -117,7 +125,7 @@ export default function GraphEditor(props) {
     if (situationName === "@switch") {
       return (
         <SwitchWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -128,7 +136,7 @@ export default function GraphEditor(props) {
     if (situationName === "@exit") {
       return (
         <ExitWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -139,7 +147,7 @@ export default function GraphEditor(props) {
     if (situationName === "@situation") {
       return (
         <SituationWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -150,7 +158,7 @@ export default function GraphEditor(props) {
     if (situationName === "@simpleinput") {
       return (
         <SimpleInputWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -161,7 +169,7 @@ export default function GraphEditor(props) {
     if (situationName === "@hotword") {
       return (
         <HotwordWithDraggingComponent
-          ref={refs.current[index]}
+          ref={refs.current[situation.id]}
           situation={situation}
           change={handleChange}
           startDragging={handleStartDragging}
@@ -172,6 +180,54 @@ export default function GraphEditor(props) {
   };
 
   const situationsArray = Object.keys(props.data.situations);
+
+  const connectSituations = (situationsArray) => {
+    const connections = [];
+    for (const situationName of situationsArray) {
+      const situation = props.data.situations[situationName];
+      for (let actionIndex = 0; actionIndex < situation.action.length; actionIndex++) {
+        const next = situation.action[actionIndex].next;
+        const toSituation = props.data.situations[next];
+        if (situationName && next && toSituation) {
+          const fromSituationRef = refs.current[situationName].current;
+          const toSituationRef = refs.current[next].current;
+          
+          const fromRect = fromSituationRef.getBoundingClientRect();
+          const toRect = toSituationRef.getBoundingClientRect();
+          
+          const containerElement = fromSituationRef.childNodes[1];
+
+          for (const containerChildNode of containerElement.childNodes) {
+            const containerId = containerChildNode.getAttribute("data-id");
+            if (containerId === "actions") {
+
+              for (const actionList of containerChildNode.childNodes) {
+                const actionListId = actionList.getAttribute("data-id");
+                if (actionListId === "actionList") {
+
+                  const actionLi = actionList.childNodes[actionIndex];
+                  const offsetTop = actionLi.offsetTop;
+
+                  connections.push(
+                    <line
+                      className="draggable__line"
+                      x1={fromRect.left + fromRect.width + 0 | 0}
+                      y1={fromRect.top + offsetTop + 23 | 0}
+                      x2={toRect.left | 0}
+                      y2={(toRect.top + (toRect.height / 2) + 8) || 0}
+                    />
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return connections;
+  };
+
   return (
     <div className="draw-container" onPointerMove={handleDragging}>
       {situationsArray.map((situationName, index) => (
@@ -190,6 +246,12 @@ export default function GraphEditor(props) {
             />
           </svg>
         )}
+
+        <svg height="100%" width="100%">
+          { connectSituations(situationsArray)
+            .map(connection => connection) }
+        </svg>
+     
     </div>
   );
 }

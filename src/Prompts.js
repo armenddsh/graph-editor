@@ -39,7 +39,7 @@ export function Prompts(props) {
   }
 
   return (
-    <div className="section-container">
+    <div data-id="prompts" className="section-container">
       <span className="section-name">Prompts</span>
       <ul>
         {props.prompts &&

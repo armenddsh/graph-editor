@@ -30,12 +30,12 @@ export function Actions(props) {
   };
 
   return (
-    <div className="section-container">
+    <div data-id="actions" className="section-container">
       <span className="section-name">Actions</span>
-      <ul>
+      <ul data-id="actionList">
         {props.actions &&
           props.actions.map((action, i) => (
-            <li key={i}>
+            <li data-id="action" key={i}>
               {
                 <Action
                   id={i}

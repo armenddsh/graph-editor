@@ -4,7 +4,7 @@ export function Prompt(props) {
   const key = Object.getOwnPropertyNames(props.prompt)[0];
 
   return (
-    <div className="control">
+    <div data-id="prompt" className="control">
       <i className="far fa-comment-dots comment-icon"></i>
       <input
         type="text"
