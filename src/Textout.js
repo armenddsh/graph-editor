@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Actions } from "./Actions";
 import { Prompts } from "./Prompts";
 
 export const Textout = React.forwardRef((props, ref) => {
+  const { situation, situations, change } = props;
 
-  const [state, setState] = React.useState(props);
+  const [state, setState] = React.useState(situation);
   const dispatch = useDispatch();
   
   const handlePromptsChange = React.useCallback(
@@ -26,22 +27,29 @@ export const Textout = React.forwardRef((props, ref) => {
     [state]
   );
 
+  useEffect(() => {
+    change(state);
+  }, [state]);
+
   return (
-    <div ref={ref} className="atom" data-situation="texout" data-id={props.id}>
+    <div ref={ref} className="atom" data-situation="texout" data-id={situation.id}>
       <i
         className="far fa-circle atom-input"
-        onPointerUp={(event) =>
+        onPointerUp={(event) => {
+          const situationName = state.startDragging.startSituation;
+          const actionId = state.startDragging.actionId;
+          
+          const newSituation = JSON.parse(JSON.stringify(situation))
+          newSituation.actions[actionId].next = situation.id;
+
           dispatch({
             type: "END_DRAGGING",
             payload: {
-              endSituation: props.id,
-              positions: {
-                endX: event.clientX,
-                endY: event.clientY,
-              },
+              situationName: situationName,
+              situation: newSituation,
             },
           })
-        }
+        }}
       ></i>
 
       <div className="container">
@@ -62,7 +70,7 @@ export const Textout = React.forwardRef((props, ref) => {
           <Actions
             actions={state.action}
             onChange={handleActionsChange}
-            situationName={props.id}
+            situationName={situation.id}
           />
         }
       </div>

@@ -38,8 +38,9 @@ export default function GraphEditor(props) {
       return (
         <TextOutWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }
@@ -47,8 +48,9 @@ export default function GraphEditor(props) {
       return (
         <CallbackWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }
@@ -56,8 +58,9 @@ export default function GraphEditor(props) {
       return (
         <SwitchWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }
@@ -65,8 +68,9 @@ export default function GraphEditor(props) {
       return (
         <ExitWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }
@@ -74,8 +78,9 @@ export default function GraphEditor(props) {
       return (
         <SituationWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }
@@ -83,8 +88,9 @@ export default function GraphEditor(props) {
       return (
         <SimpleInputWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }
@@ -92,8 +98,9 @@ export default function GraphEditor(props) {
       return (
         <HotwordWithDraggingComponent
           ref={refs.current[index]}
-          data={situation}
-          onChange={handleChange}
+          situation={situation}
+          situations={props.data.situations}
+          change={handleChange}
         />
       );
     }

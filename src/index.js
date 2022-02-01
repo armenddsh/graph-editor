@@ -40,18 +40,14 @@ const appReducer = function(state = initialState , action) {
           }
         }
       };
-      case "END_DRAGGING":
+      case "END_DRAGGING": 
         return {
           ...state,
-          startDragging: {
-            ...state.startDragging,
-            endSituation: action.payload.endSituation,
-            positions: {
-              ...state.startDragging.positions,
-              endX: action.payload.positions.endX,
-              endY: action.payload.positions.endY,
-            }
-          }
+          situations:{
+            ...state.situations,
+            [action.payload.situationName]: action.payload.situation
+          },
+          startDragging: {}
         };
         case "MOUSE_DRAGGING":
           return {

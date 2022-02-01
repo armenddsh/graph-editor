@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 
 export function withDragging(Component) {
   return React.forwardRef((props, forwardRef) => {
-    
+
     const ref = React.useRef();
     const isDragging = React.useRef(false);
     const offset = React.useRef({ x: 0, y: 0 });
     const situation = React.useRef();
 
-    const [data, setData] = React.useState(props.data);
+    const [data, setData] = React.useState(props.situation);
     const objectMovedAllowed = React.useMemo(() => ["span", "div"]);
 
     const handlePointerUp = (event) => {
@@ -28,7 +28,7 @@ export function withDragging(Component) {
     }, []);
 
     useEffect(() => {
-      props.onChange(data);
+      props.change(data);
     }, [data]);
 
     const handlePointerDown = (event) => {
@@ -85,7 +85,7 @@ export function withDragging(Component) {
           left: data.position.x,
         }}
       >
-        <Component ref={forwardRef}  {...data} />
+        <Component ref={forwardRef}  { ...props } />
       </div>
     );
   });
