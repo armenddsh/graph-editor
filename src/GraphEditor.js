@@ -25,8 +25,8 @@ function createRefs(situations) {
 }
 
 export default function GraphEditor(props) {
-  const refs = React.useRef(createRefs(props.data.situations));
   const [data, setData] = useState(props.data);
+  const refs = React.useRef(createRefs(data.situations));
 
   const [isDragging, setDragging] = useState({
     isDragging: false,
@@ -46,8 +46,6 @@ export default function GraphEditor(props) {
   });
 
   const handleChange = useCallback((ev) => {
-    debugger;
-    console.log('ev', ev);
     setData(oldData => {
       return {
         ...oldData,
@@ -208,12 +206,12 @@ export default function GraphEditor(props) {
     }
   };
 
-  const situationsArray = Object.keys(props.data.situations);
+  const situationsArray = Object.keys(data.situations);
 
   const connectSituations = (situationsArray) => {
     const connections = [];
     for (const situationName of situationsArray) {
-      const situation = props.data.situations[situationName];
+      const situation = data.situations[situationName];
       for (
         let actionIndex = 0;
         actionIndex < situation.action.length;
@@ -266,7 +264,7 @@ export default function GraphEditor(props) {
     <div className="draw-container" onPointerMove={handleDragging}>
       {situationsArray.map((situationName, index) => (
         <React.Fragment key={situationName}>
-          {renderSituation(props.data.situations[situationName], index)}
+          {renderSituation(data.situations[situationName], index)}
         </React.Fragment>
       ))}
       {isDragging.isDragging && (
