@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import GraphEditor from "./GraphEditor";
 
 export default function App() {
@@ -91,6 +91,10 @@ export default function App() {
       },
     },
   });
+
+  useEffect(() => {
+    console.log('data', data);
+  }, [data]);
 
   return (
     <GraphEditor data={data} onChange={(data) => setData(data)} />

@@ -1,5 +1,4 @@
 import React, { createRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Callback } from "./Callback";
 import { Exit } from "./Exit";
 import { withDragging } from "./hoc/withDragging";
@@ -73,6 +72,12 @@ export default function GraphEditor(props) {
         isDragging: false
       }
     });
+
+    const situations = props.data.situations;
+    const situation = situations[isDragging.from.situation];
+    situation.action[isDragging.from.actionId].next = data.situationName;
+
+    handleChange(situation);
   };
 
   const handleDragging = ( data ) => {
