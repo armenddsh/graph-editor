@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Callback } from "./Callback";
 import { Exit } from "./Exit";
@@ -18,79 +18,119 @@ export const SituationWithDraggingComponent = withDragging(Situation);
 export const ExitWithDraggingComponent = withDragging(Exit);
 
 export default function GraphEditor(props) {
-    
-    /*
-        <TextOutWithDraggingComponent data={textout} />
-        <SimpleInputWithDraggingComponent data={simpleInput} />,
-        <HotwordWithDraggingComponent data={hotword} />,
-        <CallbackWithDraggingComponent data={callback} />,
-        <SwitchWithDraggingComponent data={switchc} />,
-        <ExitWithDraggingComponent data={exit} />,
-        <SituationWithDraggingComponent data={situation} />
-    */
-    
-      const handleChange = (data) => {
-        props.onChange(oldData => {
-          return {
-            ...oldData,
-            [data.id]: data
-          }
-        });    
-      };
-    
-      const state = useSelector(state => state);
-      const dispatch = useDispatch();
-    
-      console.log("state", state);
-    
-      const renderSituation = (situation) => {
-        const situationName = situation.situation;
-        if (situationName === "@textout") {
-          return <TextOutWithDraggingComponent data={situation} onChange={handleChange} /> 
-        }
-        if (situationName === "@callback") {
-          return <CallbackWithDraggingComponent data={situation} onChange={handleChange} />
-        }
-        if (situationName === "@switch") {
-          return <SwitchWithDraggingComponent data={situation} onChange={handleChange} />
-        }
-        if (situationName === "@exit") {
-          return <ExitWithDraggingComponent data={situation} onChange={handleChange} />
-        }
-        if (situationName === "@situation") {
-          return <SituationWithDraggingComponent data={situation} onChange={handleChange} />
-        }
-        if (situationName === "@simpleinput") {
-          return <SimpleInputWithDraggingComponent data={situation} onChange={handleChange} />
-        }
-      }
-    
-      const handlePointerMove = (event) => {
-        if (state.app.startDragging.positions.startX && state.app.startDragging.positions.startY) {
-          dispatch({
-            type: "MOUSE_DRAGGING",
-            payload: {
-              positions: {
-                x: event.clientX,
-                y: event.clientY
-              } 
-            }
-          });
-        }
-      };
+  const refs = React.useRef(Object.keys(props.data.situations).map(() => createRef()));
+  
+  const addRefs = (ref) => {
+    if (ref && !refs.current.includes(ref)) {
+      refs.current.push(ref);
+    }
+  };
 
-    const situationsArray = Object.keys(props.data.situations);
-    return (
-        <div className="draw-container" onPointerMove={handlePointerMove}>
-      {situationsArray.map((situationName) =>
+  const handleChange = (data) => {
+    props.onChange((oldData) => {
+      return {
+        ...oldData,
+        [data.id]: data,
+      };
+    });
+  };
+
+  const state = useSelector((state) => state);
+  const dispatch = useDispatch();
+  
+  const renderSituation = (situation, index) => {
+    const situationName = situation.situation;
+    if (situationName === "@textout") {
+      return (
+        <TextOutWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+    if (situationName === "@callback") {
+      return (
+        <CallbackWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+    if (situationName === "@switch") {
+      return (
+        <SwitchWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+    if (situationName === "@exit") {
+      return (
+        <ExitWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+    if (situationName === "@situation") {
+      return (
+        <SituationWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+    if (situationName === "@simpleinput") {
+      return (
+        <SimpleInputWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+    if (situationName === "@hotword") {
+      return (
+        <HotwordWithDraggingComponent
+          ref={refs.current[index]}
+          data={situation}
+          onChange={handleChange}
+        />
+      );
+    }
+  };
+
+  const handlePointerMove = (event) => {
+    if (
+      state.app.startDragging.positions.startX &&
+      state.app.startDragging.positions.startY
+    ) {
+      dispatch({
+        type: "MOUSE_DRAGGING",
+        payload: {
+          positions: {
+            x: event.clientX,
+            y: event.clientY,
+          },
+        },
+      });
+    }
+  };
+
+  const situationsArray = Object.keys(props.data.situations);
+  return (
+    <div className="draw-container" onPointerMove={handlePointerMove}>
+      {situationsArray.map((situationName, index) => (
         <React.Fragment key={situationName}>
-          {
-            renderSituation(props.data.situations[situationName])
-          }
+          {renderSituation(props.data.situations[situationName], index)}
         </React.Fragment>
-      )}
-      {
-        state.app.startDragging.startSituation &&
+      ))}
+      {state.app.startDragging.startSituation &&
         state.app.startDragging.positions.x > 0 &&
         state.app.startDragging.positions.y > 0 && (
           <svg height="100%" width="100%">
@@ -102,8 +142,7 @@ export default function GraphEditor(props) {
               y2={state.app.startDragging.positions.y | 0}
             />
           </svg>
-        )
-      }
+        )}
     </div>
-    );
+  );
 }

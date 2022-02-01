@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 export function withDragging(Component) {
-  return function WithDraggingComponent({ ...props }) {
+  return React.forwardRef((props, forwardRef) => {
     const ref = React.useRef();
     const isDragging = React.useRef(false);
     const offset = React.useRef({ x: 0, y: 0 });
@@ -73,7 +73,7 @@ export function withDragging(Component) {
         setData(dataCopy);
       }
     };
-
+    
     return (
       <div
         ref={ref}
@@ -84,8 +84,8 @@ export function withDragging(Component) {
           left: data.position.x,
         }}
       >
-        <Component {...data} />
+        <Component ref={forwardRef}  {...data} />
       </div>
     );
-  };
+  });
 }

@@ -25,7 +25,6 @@ const initialState = {
 };
 
 const appReducer = function(state = initialState , action) {
-  console.log(action.payload);
   switch (action.type) {
     case "START_DRAGGING":
       return {
