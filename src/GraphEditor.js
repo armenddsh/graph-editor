@@ -45,33 +45,38 @@ export default function GraphEditor(props) {
     y: 0,
   });
 
-  const handleChange = useCallback((ev) => {
-    setData(oldData => {
-      return {
-        ...oldData,
-        situations: {
-          ...oldData.situations,
-          [ev.id]: ev
-        }
-      }
-    });
-  }, [data]);
+  const handleChange = useCallback(
+    (ev) => {
+      setData((oldData) => {
+        return {
+          ...oldData,
+          situations: {
+            ...oldData.situations,
+            [ev.id]: ev,
+          },
+        };
+      });
+    },
+    [data]
+  );
 
   const handleStartDragging = useCallback(
     (event) => {
-      setDragging((dragging) => {
-        return {
-          ...dragging,
-          from: {
-            ...dragging.from,
-            situation: event.situationName,
-            actionId: event.actionId,
-            x: event.clientX,
-            y: event.clientY,
-          },
-          isDragging: true,
-        };
-      });
+      if (event.situationName) {
+        setDragging((dragging) => {
+          return {
+            ...dragging,
+            from: {
+              ...dragging.from,
+              situation: event.situationName,
+              actionId: event.actionId,
+              x: event.clientX,
+              y: event.clientY,
+            },
+            isDragging: true,
+          };
+        });
+      }
     },
     [isDragging]
   );
@@ -95,7 +100,7 @@ export default function GraphEditor(props) {
         isDragging: false,
       });
 
-      setData(oldData => {
+      setData((oldData) => {
         const situations = oldData.situations;
         const situation = situations[isDragging.from.situation];
         situation.action[isDragging.from.actionId].next = event.situationName;
@@ -104,9 +109,9 @@ export default function GraphEditor(props) {
           ...oldData,
           situations: {
             ...oldData.situations,
-            [isDragging.from.situation]: situation
-          }
-        }
+            [isDragging.from.situation]: situation,
+          },
+        };
       });
     },
     [isDragging, data]
@@ -125,7 +130,7 @@ export default function GraphEditor(props) {
     [isDragging]
   );
 
-  const renderSituation = (situation, index) => {
+  const renderSituation = (situation) => {
     const situationName = situation.situation;
     if (situationName === "@textout") {
       return (
@@ -231,7 +236,6 @@ export default function GraphEditor(props) {
           for (const containerChildNode of containerElement.childNodes) {
             const containerId = containerChildNode.getAttribute("data-id");
             if (containerId === "actions") {
-
               for (const actionList of containerChildNode.childNodes) {
                 const actionListId = actionList.getAttribute("data-id");
 
@@ -262,24 +266,24 @@ export default function GraphEditor(props) {
 
   return (
     <div className="draw-container" onPointerMove={handleDragging}>
-      {situationsArray.map((situationName, index) => (
+      {situationsArray.map((situationName) => (
         <React.Fragment key={situationName}>
-          {renderSituation(data.situations[situationName], index)}
+          {renderSituation(data.situations[situationName])}
         </React.Fragment>
       ))}
-      {isDragging.isDragging && (
-        <svg height="100%" width="100%">
-          <line
-            className="draggable__line"
-            x1={isDragging.from.x | 0}
-            y1={isDragging.from.y | 0}
-            x2={isDragging.x | 0}
-            y2={isDragging.y | 0}
-          />
-        </svg>
-      )}
 
       <svg height="100%" width="100%">
+        {isDragging.isDragging && (
+          <svg height="100%" width="100%">
+            <line
+              className="dragging__line"
+              x1={isDragging.from.x | 0}
+              y1={isDragging.from.y | 0}
+              x2={isDragging.x | 0}
+              y2={isDragging.y | 0}
+            />
+          </svg>
+        )}
         {connectSituations(situationsArray).map((connection) => connection)}
       </svg>
     </div>

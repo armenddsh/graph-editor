@@ -185,3 +185,8 @@ ul li {
   stroke: #4ea9ff;
   stroke-width: 4px;
 }
+.dragging__line {
+  stroke: #4ea9ff;
+  stroke-width: 4px;
+  stroke-dasharray: 7px;
+}
