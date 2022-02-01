@@ -83,36 +83,38 @@ export default function GraphEditor(props) {
 
   const handleEndDragging = useCallback(
     (event) => {
-      setDragging({
-        from: {
-          situation: "",
-          actionId: 0,
-          x: 0,
-          y: 0,
-        },
-        to: {
-          situation: "",
-          x: 0,
-          y: 0,
-        },
-        x: 0,
-        y: 0,
-        isDragging: false,
-      });
-
-      setData((oldData) => {
-        const situations = oldData.situations;
-        const situation = situations[isDragging.from.situation];
-        situation.action[isDragging.from.actionId].next = event.situationName;
-
-        return {
-          ...oldData,
-          situations: {
-            ...oldData.situations,
-            [isDragging.from.situation]: situation,
+      if (isDragging.from && isDragging.from.situation) {
+        setDragging({
+          from: {
+            situation: "",
+            actionId: 0,
+            x: 0,
+            y: 0,
           },
-        };
-      });
+          to: {
+            situation: "",
+            x: 0,
+            y: 0,
+          },
+          x: 0,
+          y: 0,
+          isDragging: false,
+        });
+  
+        setData((oldData) => {
+          const situations = oldData.situations;
+          const situation = situations[isDragging.from.situation];
+          situation.action[isDragging.from.actionId].next = event.situationName;
+  
+          return {
+            ...oldData,
+            situations: {
+              ...oldData.situations,
+              [isDragging.from.situation]: situation,
+            },
+          };
+        });
+      }
     },
     [isDragging, data]
   );
